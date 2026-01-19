@@ -142,6 +142,7 @@
             font-weight: bold;
             margin-bottom: 15px;
             font-size: 1.1em;
+            line-height: 1.4;
         }
         
         .exam-options {
@@ -204,6 +205,8 @@
             display: flex;
             justify-content: space-between;
             margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         .exam-btn {
@@ -215,6 +218,9 @@
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         
         .exam-btn:hover {
@@ -247,7 +253,11 @@
         .exam-results {
             display: none;
             text-align: center;
-            margin-top: 30px;
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
         }
         
         .results-title {
@@ -280,11 +290,9 @@
             color: #dc3545;
         }
         
-        .loader {
-            text-align: center;
-            padding: 40px;
-            font-size: 1.2em;
-            color: var(--secondary-color);
+        .restart-btn {
+            margin-top: 20px;
+            background: var(--primary-color);
         }
         
         .footer {
@@ -294,6 +302,24 @@
             color: #6c757d;
             font-size: 0.9em;
             border-top: 1px solid #dee2e6;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .loader {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2em;
+            color: var(--secondary-color);
+        }
+        
+        .error-message {
+            color: var(--warning-color);
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
         }
         
         @media (max-width: 768px) {
@@ -396,23 +422,25 @@
         <h2 class="exam-title">Экзамен по правилам мотоциклетного спорта</h2>
         
         <div class="exam-container" id="exam-container">
-            <div class="exam-progress" id="exam-progress">Подготовка экзамена...</div>
+            <div class="exam-progress" id="exam-progress">Загрузка вопросов...</div>
             
             <div class="loader" id="exam-loader">
-                <p>Загрузка вопросов из всех глав...</p>
+                <p>Загрузка вопросов из базы данных...</p>
                 <p>Пожалуйста, подождите</p>
             </div>
             
             <div class="exam-card" id="exam-card" style="display: none;">
                 <div class="exam-question" id="exam-question"></div>
                 <div class="exam-options" id="exam-options">
-                    <!-- Варианты ответов будут сгенерированы здесь -->
+                    <!-- Варианты ответов будут добавлены здесь -->
                 </div>
                 <div class="exam-feedback" id="exam-feedback"></div>
             </div>
             
+            <div class="error-message" id="error-message" style="display: none;"></div>
+            
             <div class="exam-controls">
-                <button class="exam-btn reset-btn" id="reset-exam">Начать заново</button>
+                <button class="exam-btn reset-btn" id="reset-exam">Начать экзамен заново</button>
                 <button class="exam-btn" id="next-question" disabled>Следующий вопрос</button>
                 <button class="exam-btn" id="finish-exam" style="display: none;">Завершить экзамен</button>
             </div>
@@ -420,9 +448,9 @@
         
         <div class="exam-results" id="exam-results">
             <div class="results-title">Результаты экзамена</div>
-            <div class="results-summary" id="results-summary"></div>
+            <div class="results-summary" id="results-summary">Вы ответили правильно на X из 50 вопросов</div>
             <div class="results-details" id="results-details">
-                <!-- Детали результатов будут сгенерированы здесь -->
+                <!-- Детали результатов будут заполнены здесь -->
             </div>
             <button class="exam-btn" id="restart-exam">Пройти экзамен еще раз</button>
             <button class="exam-btn" id="back-to-main">Вернуться к выбору глав</button>
@@ -431,24 +459,51 @@
     
     <div class="footer">
         <p>Официальные правила вида спорта "Мотоциклетный спорт" на 2025 год. Утверждены приказом Министерства спорта Российской Федерации от 15 ноября 2024 г. № 1119</p>
+        <p>Дата создания: 19 января 2026 года | Создано для обучения и контроля знаний</p>
     </div>
 
     <script>
         // Глобальные переменные
-        let isExamMode = false;
-        let allChapterData = {}; // Хранение данных из всех глав
-        let examCards = [];
+        let examQuestions = [];
         let currentQuestionIndex = 0;
         let correctAnswers = 0;
-        let examStarted = false;
         let examResponses = [];
-        let chaptersLoaded = 0;
-        const totalChapters = 13;
+        let examModeStarted = false;
+        let isExamMode = false;
 
         // Инициализация
         document.addEventListener('DOMContentLoaded', function() {
             setupEventListeners();
+            
+            // Загружаем вопросы для экзамена
+            loadExamQuestions();
         });
+
+        // Функция загрузки вопросов из JSON файла
+        function loadExamQuestions() {
+            fetch('exam_questions.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка загрузки файла с вопросами');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    examQuestions = data.questions;
+                    console.log('Вопросы успешно загружены:', examQuestions.length);
+                })
+                .catch(error => {
+                    console.error('Ошибка при загрузке вопросов:', error);
+                    showError('Не удалось загрузить вопросы для экзамена. Пожалуйста, проверьте наличие файла exam_questions.json.');
+                });
+        }
+
+        // Функция отображения ошибки
+        function showError(message) {
+            document.getElementById('exam-loader').style.display = 'none';
+            document.getElementById('error-message').textContent = message;
+            document.getElementById('error-message').style.display = 'block';
+        }
 
         // Настройка обработчиков событий
         function setupEventListeners() {
@@ -462,7 +517,12 @@
                     if (isExamMode) {
                         document.getElementById('learning-mode').style.display = 'none';
                         document.getElementById('exam-mode').style.display = 'block';
-                        startExamPreparation();
+                        
+                        if (examQuestions.length > 0 && !examModeStarted) {
+                            startExam();
+                        } else if (examQuestions.length === 0) {
+                            showError('Вопросы для экзамена еще не загружены. Пожалуйста, подождите.');
+                        }
                     } else {
                         document.getElementById('learning-mode').style.display = 'block';
                         document.getElementById('exam-mode').style.display = 'none';
@@ -474,20 +534,24 @@
             document.querySelectorAll('.chapter-card').forEach(card => {
                 card.addEventListener('click', function() {
                     const chapter = this.dataset.chapter;
-                    if (chapter) {
+                    if (chapter === 'all') {
+                        // Переключаемся в режим экзамена
+                        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                        document.querySelector('.mode-btn[data-mode="exam"]').classList.add('active');
+                        document.getElementById('learning-mode').style.display = 'none';
+                        document.getElementById('exam-mode').style.display = 'block';
+                        isExamMode = true;
+                        
+                        if (examQuestions.length > 0) {
+                            startExam();
+                        } else {
+                            showError('Вопросы для экзамена еще не загружены. Пожалуйста, подождите.');
+                        }
+                    } else {
+                        // В реальной версии здесь будет переход к конкретной главе
                         window.location.href = `QW_chapters/chapter${chapter}.html`;
                     }
                 });
-            });
-
-            // Кнопка для всех глав (полный экзамен)
-            document.getElementById('all-chapters').addEventListener('click', function() {
-                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-                document.querySelector('.mode-btn[data-mode="exam"]').classList.add('active');
-                isExamMode = true;
-                document.getElementById('learning-mode').style.display = 'none';
-                document.getElementById('exam-mode').style.display = 'block';
-                startExamPreparation();
             });
 
             // Кнопки экзамена
@@ -498,219 +562,89 @@
             document.getElementById('back-to-main').addEventListener('click', backToMain);
         }
 
-        // Подготовка к экзамену - загрузка данных из всех глав
-        function startExamPreparation() {
-            document.getElementById('exam-loader').style.display = 'block';
-            document.getElementById('exam-card').style.display = 'none';
-            document.getElementById('exam-results').style.display = 'none';
-            document.getElementById('exam-progress').textContent = 'Загрузка данных из глав...';
-            
-            chaptersLoaded = 0;
-            allChapterData = {};
-            
-            // Загружаем данные из всех 13 глав
-            for (let chapterNum = 1; chapterNum <= totalChapters; chapterNum++) {
-                loadChapterData(chapterNum);
-            }
-        }
-
-        // Загрузка данных из одной главы
-        function loadChapterData(chapterNum) {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', `QW_chapters/chapter${chapterNum}.html`, true);
-            
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    try {
-                        // Создаем DOM-элемент для парсинга HTML
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(xhr.responseText, 'text/html');
-                        
-                        // Находим скрипт с данными карточек
-                        const scriptTag = doc.querySelector('script');
-                        if (scriptTag) {
-                            // Извлекаем данные из JavaScript-кода
-                            const scriptContent = scriptTag.textContent;
-                            const cardsDataMatch = scriptContent.match(/const cardsData\s*=\s*(\[[\s\S]*?\]);/);
-                            
-                            if (cardsDataMatch && cardsDataMatch[1]) {
-                                // Очищаем и преобразуем JSON
-                                try {
-                                    let cardsData = JSON.parse(cardsDataMatch[1].replace(/(\r\n|\n|\r)/gm, "").replace(/\s+/g, " "));
-                                    allChapterData[chapterNum] = cardsData;
-                                    chaptersLoaded++;
-                                    checkAllChaptersLoaded();
-                                } catch (e) {
-                                    console.error(`Ошибка при парсинге данных главы ${chapterNum}:`, e);
-                                    chaptersLoaded++;
-                                    checkAllChaptersLoaded();
-                                }
-                            } else {
-                                console.error(`Не удалось найти данные в главе ${chapterNum}`);
-                                chaptersLoaded++;
-                                checkAllChaptersLoaded();
-                            }
-                        } else {
-                            console.error(`Не удалось найти скрипт в главе ${chapterNum}`);
-                            chaptersLoaded++;
-                            checkAllChaptersLoaded();
-                        }
-                    } catch (e) {
-                        console.error(`Ошибка при обработке главы ${chapterNum}:`, e);
-                        chaptersLoaded++;
-                        checkAllChaptersLoaded();
-                    }
-                } else {
-                    console.error(`Ошибка загрузки главы ${chapterNum}:`, xhr.statusText);
-                    chaptersLoaded++;
-                    checkAllChaptersLoaded();
-                }
-            };
-            
-            xhr.onerror = function() {
-                console.error(`Ошибка сети при загрузке главы ${chapterNum}`);
-                chaptersLoaded++;
-                checkAllChaptersLoaded();
-            };
-            
-            xhr.send();
-        }
-
-        // Проверка, загружены ли все главы
-        function checkAllChaptersLoaded() {
-            if (chaptersLoaded === totalChapters) {
-                // Все главы загружены, начинаем экзамен
-                startExam();
-            } else if (chaptersLoaded > totalChapters) {
-                // Все главы загружены (с запасом), начинаем экзамен
-                startExam();
-            }
-        }
-
-        // Запуск экзамена
+        // Функция запуска экзамена
         function startExam() {
-            // Проверяем, есть ли данные для экзамена
-            let totalQuestions = 0;
-            for (let chapter in allChapterData) {
-                if (allChapterData[chapter]) {
-                    totalQuestions += allChapterData[chapter].length;
-                }
-            }
-            
-            if (totalQuestions === 0) {
-                document.getElementById('exam-loader').innerHTML = `
-                    <p style="color: red; font-weight: bold;">Ошибка загрузки данных</p>
-                    <p>Не удалось загрузить вопросы из файлов глав. Пожалуйста, проверьте:</p>
-                    <ul style="text-align: left; margin: 10px auto;">
-                        <li>Наличие папки QW_chapters в той же директории</li>
-                        <li>Наличие файлов chapter1.html до chapter13.html в папке QW_chapters</li>
-                        <li>Правильность формата файлов (должны содержать данные в формате JavaScript)</li>
-                    </ul>
-                    <button class="exam-btn" id="retry-exam">Попробовать еще раз</button>
-                `;
-                document.getElementById('retry-exam').addEventListener('click', startExamPreparation);
+            // Проверяем, загружены ли вопросы
+            if (examQuestions.length === 0) {
+                showError('Вопросы для экзамена еще не загружены. Пожалуйста, подождите.');
                 return;
             }
             
-            // Собираем все карточки из всех глав
-            examCards = [];
-            for (let chapterNum = 1; chapterNum <= totalChapters; chapterNum++) {
-                if (allChapterData[chapterNum]) {
-                    allChapterData[chapterNum].forEach(card => {
-                        examCards.push({
-                            ...card,
-                            chapter: chapterNum,
-                            source: `Глава ${chapterNum}`
-                        });
-                    });
-                }
-            }
+            // Перемешиваем вопросы и выбираем 50 случайных
+            const shuffledQuestions = [...examQuestions].sort(() => 0.5 - Math.random());
+            examQuestions = shuffledQuestions.slice(0, 50);
             
-            // Если вопросов меньше 50, берем все доступные
-            const examSize = Math.min(50, examCards.length);
-            
-            // Перемешиваем и выбираем нужное количество карточек
-            examCards = shuffleArray(examCards).slice(0, examSize);
-            
-            // Сбрасываем состояние
+            // Инициализируем экзамен
             currentQuestionIndex = 0;
             correctAnswers = 0;
             examResponses = [];
-            examStarted = true;
+            examModeStarted = true;
             
             // Скрываем загрузчик и показываем первый вопрос
             document.getElementById('exam-loader').style.display = 'none';
+            document.getElementById('error-message').style.display = 'none';
             document.getElementById('exam-card').style.display = 'block';
-            document.getElementById('exam-results').style.display = 'none';
             
-            // Показываем первый вопрос
             showQuestion();
         }
 
-        // Перемешивание массива
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        // Показ вопроса
+        // Функция показа вопроса
         function showQuestion() {
-            if (currentQuestionIndex >= examCards.length) {
+            if (currentQuestionIndex >= examQuestions.length) {
                 finishExam();
                 return;
             }
 
-            const card = examCards[currentQuestionIndex];
-            document.getElementById('exam-progress').textContent = 
-                `Вопрос ${currentQuestionIndex + 1} из ${examCards.length}`;
-            document.getElementById('exam-question').textContent = card.question;
+            const question = examQuestions[currentQuestionIndex];
+            document.getElementById('exam-progress').textContent = `Вопрос ${currentQuestionIndex + 1} из ${examQuestions.length}`;
+            document.getElementById('exam-question').textContent = question.question;
             
             const optionsContainer = document.getElementById('exam-options');
             optionsContainer.innerHTML = '';
             
-            card.options.forEach((option, index) => {
+            question.options.forEach((option, index) => {
                 const optionElement = document.createElement('div');
                 optionElement.className = 'exam-option';
                 optionElement.dataset.option = index;
                 optionElement.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
-                optionElement.addEventListener('click', () => selectOption(index, card));
+                optionElement.addEventListener('click', () => selectOption(index, question));
                 optionsContainer.appendChild(optionElement);
             });
             
             document.getElementById('exam-feedback').textContent = '';
             document.getElementById('exam-feedback').className = 'exam-feedback';
             document.getElementById('next-question').disabled = true;
-            document.getElementById('finish-exam').style.display = 
-                currentQuestionIndex === examCards.length - 1 ? 'block' : 'none';
+            document.getElementById('finish-exam').style.display = currentQuestionIndex === examQuestions.length - 1 ? 'block' : 'none';
         }
 
-        // Выбор ответа
-        function selectOption(selectedOption, card) {
+        // Функция выбора ответа
+        function selectOption(selectedOption, question) {
             const options = document.querySelectorAll('.exam-option');
             
-            // Сбрасываем выделение
+            // Снимаем выделение со всех вариантов
             options.forEach(opt => {
                 opt.classList.remove('selected', 'correct', 'incorrect');
             });
             
-            // Выделяем выбранный и правильный варианты
-            options[selectedOption].classList.add('selected');
-            options[card.correctAnswer].classList.add('correct');
+            // Добавляем выделение выбранному варианту
+            const selectedElement = options[selectedOption];
+            selectedElement.classList.add('selected');
+            
+            // Показываем правильный ответ
+            const correctElement = options[question.correctAnswer];
+            correctElement.classList.add('correct');
             
             // Показываем результат
             const feedback = document.getElementById('exam-feedback');
-            if (selectedOption === card.correctAnswer) {
+            if (selectedOption === question.correctAnswer) {
                 feedback.textContent = "✓ Верно! Ваш ответ правильный.";
                 feedback.className = "exam-feedback correct";
                 correctAnswers++;
                 examResponses.push({ 
                     question: currentQuestionIndex, 
                     correct: true,
-                    selected: selectedOption,
-                    correctAnswer: card.correctAnswer
+                    selectedOption: selectedOption,
+                    questionData: question
                 });
             } else {
                 feedback.textContent = "✗ Неверно. Правильный ответ показан зеленым цветом.";
@@ -718,71 +652,76 @@
                 examResponses.push({ 
                     question: currentQuestionIndex, 
                     correct: false,
-                    selected: selectedOption,
-                    correctAnswer: card.correctAnswer
+                    selectedOption: selectedOption,
+                    questionData: question
                 });
             }
             
             document.getElementById('next-question').disabled = false;
         }
 
-        // Следующий вопрос
+        // Функция следующего вопроса
         function nextQuestion() {
             currentQuestionIndex++;
-            if (currentQuestionIndex < examCards.length) {
+            if (currentQuestionIndex < examQuestions.length) {
                 showQuestion();
             } else {
                 finishExam();
             }
         }
 
-        // Завершение экзамена
+        // Функция завершения экзамена
         function finishExam() {
-            examStarted = false;
+            examModeStarted = false;
             document.getElementById('exam-container').style.display = 'none';
             document.getElementById('exam-results').style.display = 'block';
             
             document.getElementById('results-summary').textContent = 
-                `Вы ответили правильно на ${correctAnswers} из ${examCards.length} вопросов`;
+                `Вы ответили правильно на ${correctAnswers} из ${examQuestions.length} вопросов`;
             
             const resultsDetails = document.getElementById('results-details');
             resultsDetails.innerHTML = '';
             
+            // Добавляем детали по каждому вопросу
             examResponses.forEach((response, index) => {
-                const card = examCards[index];
+                const question = response.questionData;
                 const resultItem = document.createElement('div');
                 resultItem.className = `result-item ${response.correct ? 'correct' : 'incorrect'}`;
                 
-                const selectedAnswer = card.options[response.selected];
-                const correctAnswer = card.options[card.correctAnswer];
-                
                 resultItem.innerHTML = `
-                    <strong>Вопрос ${index + 1} (${card.source}):</strong><br>
-                    ${card.question}<br>
-                    <strong>Ваш ответ:</strong> ${String.fromCharCode(65 + response.selected)}. ${selectedAnswer}<br>
-                    <strong>Правильный ответ:</strong> ${String.fromCharCode(65 + card.correctAnswer)}. ${correctAnswer}
+                    <strong>Вопрос ${index + 1} (${question.chapterName}):</strong> ${question.question}<br>
+                    <strong>Ваш ответ:</strong> ${String.fromCharCode(65 + response.selectedOption)}. ${question.options[response.selectedOption]}<br>
+                    <strong>Правильный ответ:</strong> ${String.fromCharCode(65 + question.correctAnswer)}. ${question.options[question.correctAnswer]}<br>
+                    ${response.correct ? '✓ Правильный ответ' : '✗ Неправильный ответ'}<br>
+                    <strong>Пояснение:</strong> ${question.explanation}
                 `;
                 resultsDetails.appendChild(resultItem);
             });
         }
 
-        // Сброс экзамена
+        // Функция сброса результатов
         function resetExam() {
-            examStarted = true;
             currentQuestionIndex = 0;
             correctAnswers = 0;
             examResponses = [];
+            examModeStarted = true;
             document.getElementById('exam-container').style.display = 'block';
             document.getElementById('exam-results').style.display = 'none';
             showQuestion();
         }
 
-        // Перезапуск экзамена
+        // Функция перезапуска экзамена
         function restartExam() {
-            startExamPreparation();
+            // Перемешиваем вопросы заново
+            const shuffledQuestions = [...examQuestions].sort(() => 0.5 - Math.random());
+            examQuestions = shuffledQuestions.slice(0, 50);
+            
+            startExam();
+            document.getElementById('exam-container').style.display = 'block';
+            document.getElementById('exam-results').style.display = 'none';
         }
 
-        // Возврат к главному меню
+        // Функция возврата к главному меню
         function backToMain() {
             document.getElementById('learning-mode').style.display = 'block';
             document.getElementById('exam-mode').style.display = 'none';
