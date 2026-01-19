@@ -1,0 +1,938 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правила мотоциклетного спорта 2025 - Глава X</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #e74c3c;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --card-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            --border-radius: 8px;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+        
+        header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        
+        .intro {
+            background: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .intro p {
+            margin-bottom: 10px;
+        }
+        
+        .mode-selector {
+            margin: 20px 0;
+            text-align: center;
+            background: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+        
+        .mode-btn {
+            padding: 10px 20px;
+            margin: 0 10px;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .mode-btn:hover {
+            background: #2980b9;
+        }
+        
+        .mode-btn.active {
+            background: var(--success-color);
+            box-shadow: 0 0 10px rgba(39, 174, 96, 0.5);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        button {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        button:hover {
+            background: #2980b9;
+        }
+        
+        button.reset-btn {
+            background: var(--warning-color);
+        }
+        
+        .progress {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-number {
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        
+        .card-topic {
+            background: var(--secondary-color);
+            color: white;
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        
+        .question {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+        
+        .options {
+            margin-bottom: 15px;
+        }
+        
+        .option {
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .option:hover {
+            background: #e9ecef;
+            border-color: #ced4da;
+        }
+        
+        .option.selected {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            border-left: 4px solid #28a745;
+        }
+        
+        .option.correct {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            border-left: 4px solid #28a745;
+        }
+        
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 4px;
+            font-style: italic;
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+        }
+        
+        .show-explanation {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+        
+        .show-explanation:hover {
+            background: #5a6268;
+        }
+        
+        .exam-results {
+            display: none;
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+        
+        .results-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .results-summary {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        
+        .results-details {
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .result-item {
+            padding: 8px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .result-item.correct {
+            color: #28a745;
+        }
+        
+        .result-item.incorrect {
+            color: #dc3545;
+        }
+        
+        .restart-btn {
+            margin-top: 20px;
+            background: var(--primary-color);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #6c757d;
+            font-size: 0.9em;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            body {
+                padding: 10px;
+            }
+            
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Правила вида спорта "Мотоциклетный спорт" 2025</h1>
+        <p>Глава X. Экологический кодекс ОСФ</p>
+    </header>
+    
+    <div class="intro">
+        <p>Данные карточки содержат вопросы по десятой главе правил мотоциклетного спорта 2025 года. Используйте их для подготовки к экзаменам и контроля знаний.</p>
+    </div>
+    
+    <div class="mode-selector">
+        <button class="mode-btn active" data-mode="learning">Режим обучения</button>
+        <button class="mode-btn" data-mode="exam">Режим экзамена</button>
+    </div>
+    
+    <div class="controls">
+        <button class="shuffle-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16v16H4z"/>
+                <path d="M8 8l8 8"/>
+                <path d="M8 16l8-8"/>
+            </svg>
+            Перемешать карточки
+        </button>
+        <button class="reset-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74.27 9.75 9.75 0 0 1 4.48 5.73M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-.27A9.89 9.89 0 0 1 3 12"></path>
+            </svg>
+            Сбросить результаты
+        </button>
+        <button id="show-all-explanations" class="hidden">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            Показать все объяснения
+        </button>
+    </div>
+    
+    <div class="progress" id="progress">Правильных ответов: 0 из 20</div>
+    
+    <div class="cards-container" id="cards-container">
+        <!-- Карточки будут сгенерированы JavaScript -->
+    </div>
+    
+    <div class="exam-results" id="exam-results">
+        <div class="results-title">Результаты экзамена</div>
+        <div class="results-summary" id="results-summary">Вы ответили правильно на X из 20 вопросов</div>
+        <div class="results-details" id="results-details">
+            <!-- Детали результатов будут заполнены JavaScript -->
+        </div>
+        <button class="restart-btn" id="restart-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74.27 9.75 9.75 0 0 1 4.48 5.73M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-.27A9.89 9.89 0 0 1 3 12"></path>
+            </svg>
+            Пройти экзамен еще раз
+        </button>
+    </div>
+    
+    <footer>
+        <p>Официальные правила вида спорта "Мотоциклетный спорт" на 2025 год. Утверждены приказом Министерства спорта Российской Федерации от 15 ноября 2024 г. № 1119</p>
+        <p>Дата создания: 19 января 2026 года | Создано для обучения и контроля знаний</p>
+    </footer>
+
+    <script>
+        // Данные для карточек
+        const cardsData = [
+            {
+                number: 1,
+                topic: "Общие положения",
+                question: "Какая главная цель Экологического кодекса ОСФ?",
+                options: [
+                    "Максимизация скорости мототехники",
+                    "Снижение себестоимости соревнований",
+                    "Минимизация негативного воздействия на окружающую среду при проведении соревнований",
+                    "Увеличение количества зрителей"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 10.1: «Экологический кодекс ОСФ разработан в целях минимизации негативного воздействия на окружающую среду при проведении соревнований по мотоциклетному спорту и устанавливает требования к участникам, организаторам и другим заинтересованным лицам»."
+            },
+            {
+                number: 2,
+                topic: "Контролер по охране окружающей среды",
+                question: "Кто назначается организатором для контроля за соблюдением экологических требований?",
+                options: [
+                    "Главный судья соревнования",
+                    "Спортивный комиссар",
+                    "Контролер по охране окружающей среды, успешно прошедший семинар по экологии, организованный ОСФ",
+                    "Медицинский работник"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 10.2.1: «На каждое спортивное мероприятие, организатор должен назначить контролера по охране окружающей среды. Это лицо должно успешно пройти семинар по экологии, организованный ОСФ. Задачей его будет контроль за соблюдением экологических требований при организации и проведении соревнования»."
+            },
+            {
+                number: 3,
+                topic: "Экологические коврики",
+                question: "Для чего предназначены экологические коврики и где они должны использоваться?",
+                options: [
+                    "Для отдыха спортсменов",
+                    "Для мытья мототехники",
+                    "Для предотвращения загрязнения почвы и воды везде, где разрешена работа с мотоциклетной техникой, в закрытом парке, в боксах, под генераторами",
+                    "Для оформления территории соревнования"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 10.4.1: «Экологический коврик должен состоять из впитывающей верхней части и непроницаемой нижней части. Экологический коврик служит для предотвращения загрязнения почвы и воды на спортивных мероприятиях и должен использоваться: - везде, где разрешена работа с мотоциклетной техникой; - в закрытом парке; - в боксах, под генераторами или там, где может возникнуть опасность разлива жидкостей на любых соревнованиях»."
+            },
+            {
+                number: 4,
+                topic: "Хранение топлива",
+                question: "Какие требования предъявляются к хранению топлива и смазочных материалов?",
+                options: [
+                    "Хранение в открытом виде для удобства доступа",
+                    "Хранение только в пластиковых канистрах",
+                    "Хранение в специальных емкостях на непроницаемом покрытии с бортиками, предотвращающими растекание жидкости",
+                    "Хранение в любом месте территории соревнования"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 10.4.2: «Топливо, масла и другие технические жидкости должны храниться только в специальных емкостях (канистрах, бочках), установленных на непроницаемом покрытии с бортиками, предотвращающими растекание жидкости в случае разлива. Места хранения должны быть обозначены и находиться под контролем»."
+            },
+            {
+                number: 5,
+                topic: "Утилизация отходов",
+                question: "Как должна осуществляться утилизация отходов на соревнованиях?",
+                options: [
+                    "Сжигание на месте",
+                    "Закапывание в землю",
+                    "Сбор в специально отведенные контейнеры с последующей передачей на утилизацию в соответствии с законодательством",
+                    "Выброс за пределы территории соревнования"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 10.4.3: «Все отходы (масляные тряпки, фильтры, упаковки от технических жидкостей, бытовой мусор и т.д.) должны собираться в специально отведенные контейнеры и вывозиться с территории соревнования для последующей утилизации в соответствии с требованиями законодательства Российской Федерации»."
+            },
+            {
+                number: 6,
+                topic: "Мойка мототехники",
+                question: "Где разрешается мыть мототехнику на территории соревнования?",
+                options: [
+                    "В любом месте территории",
+                    "Только в специально отведенных местах с системой сбора и очистки сточных вод",
+                    "В ручье или пруде рядом с трассой",
+                    "Только в закрытом парке"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 10.4.4: «Мойка мототехники разрешается только в специально отведенных местах, оборудованных системой сбора и очистки сточных вод. Запрещается мыть технику в водоемах, на грунте и в других местах, где сточные воды могут попасть в окружающую среду»."
+            },
+            {
+                number: 7,
+                topic: "Топливо и масла",
+                question: "Какие требования предъявляются к обращению с топливом и маслами?",
+                options: [
+                    "Свободная продажа любому желающему",
+                    "Хранение в открытом виде для удобства",
+                    "Запрет на разлив и попадание на почву, немедленная ликвидация разливов с использованием впитывающих материалов",
+                    "Использование только импортных масел"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 10.4.5: «Запрещается разливать топливо и масла на почву, асфальт и другие поверхности. В случае разлива необходимо немедленно ликвидировать его с использованием впитывающих материалов (песок, опилки, специальные салфетки) и утилизировать в соответствии с требованиями»."
+            },
+            {
+                number: 8,
+                topic: "Батареи и аккумуляторы",
+                question: "Как должна осуществляться утилизация использованных батарей и аккумуляторов?",
+                options: [
+                    "Выброс в обычный мусорный контейнер",
+                    "Сжигание",
+                    "Сбор в специальные контейнеры для последующей передачи в специализированные организации",
+                    "Закапывание в землю"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 10.4.6: «Использованные батареи, аккумуляторы и другие источники питания подлежат обязательной сбору в специальные контейнеры и последующей передаче в специализированные организации для утилизации в соответствии с законодательством»."
+            },
+            {
+                number: 9,
+                topic: "Защита растительности",
+                question: "Какие меры должны приниматься для защиты растительности при проведении соревнований?",
+                options: [
+                    "Полное уничтожение всей растительности на трассе",
+                    "Игнорирование растительного покрова",
+                    "Минимизация повреждения растительности, восстановление нарушенных участков после соревнований",
+                    "Посадка новых деревьев только в городских условиях"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 10.4.7: «Организаторы соревнований обязаны принимать меры по минимизации повреждения растительного покрова при подготовке трасс и проведении соревнований. По окончании соревнований должны быть проведены работы по восстановлению нарушенных участков территории»."
+            },
+            {
+                number: 10,
+                topic: "Водные объекты",
+                question: "Какие требования предъявляются к защите водных объектов при проведении соревнований?",
+                options: [
+                    "Использование водоемов для мойки техники",
+                    "Сброс отработанных жидкостей в водоемы",
+                    "Запрет на проведение работ и мойку техники в водоохраных зонах и непосредственной близости от водных объектов",
+                    "Использование водоемов для охлаждения двигателей"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 10.4.8: «Запрещается проведение любых работ с мототехникой, мойка техники, слив и хранение топлива и масел в водоохранных зонах и на расстоянии менее 50 метров от береговой линии водных объектов (реки, озера, пруды)»."
+            },
+            {
+                number: 11,
+                topic: "Шумовое загрязнение",
+                question: "Какие требования предъявляются к уровню шума от мототехники?",
+                options: [
+                    "Отсутствие ограничений по шуму",
+                    "Уровень шума должен соответствовать нормам, установленным для конкретного типа соревнований и местности",
+                    "Запрет на использование глушителей",
+                    "Максимально возможный уровень шума"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 10.4.9: «Уровень шума от мототехники должен соответствовать нормативным требованиям, установленным для конкретного типа соревнований и местности проведения. Организатор обязан обеспечить контроль уровня шума и принимать меры по его снижению при превышении норм»."
+            },
+            {
+                number: 12,
+                topic: "Экологический инструктаж",
+                question: "Кто обязан пройти экологический инструктаж перед началом соревнований?",
+                options: [
+                    "Только спортсмены",
+                    "Только организаторы",
+                    "Все участники соревнований, включая спортсменов, тренеров, механиков, организаторов и волонтеров",
+                    "Только официальные лица"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 10.3.1: «Перед началом соревнований все участники (спортсмены, тренеры, механики, организаторы, волонтеры) обязаны пройти экологический инструктаж, в ходе которого доводятся требования Экологического кодекса и конкретные правила поведения на территории соревнования»."
+            },
+            {
+                number: 13,
+                topic: "Ответственность за нарушения",
+                question: "Какая ответственность наступает за нарушение экологических требований?",
+                options: [
+                    "Только предупреждение",
+                    "Только штраф",
+                    "Предупреждение, штраф, дисквалификация с соревнования, возмещение ущерба",
+                    "Никакой ответственности"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 10.5.1: «За нарушение требований Экологического кодекса к участникам могут быть применены следующие меры: предупреждение, штраф, дисквалификация с соревнования, возмещение причиненного ущерба окружающей среде в установленном законом порядке»."
+            },
+            {
+                number: 14,
+                topic: "Экологические сборы",
+                question: "Как используются средства от экологических сборов на соревнованиях?",
+                options: [
+                    "На призы победителям",
+                    "На организационные расходы",
+                    "На восстановление территории после соревнований, приобретение экологического оборудования, проведение экологических мероприятий",
+                    "На зарплату организаторам"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 10.5.2: «Средства, собираемые в качестве экологических сборов с участников соревнований, используются исключительно на восстановление территории после соревнований, приобретение экологического оборудования (коврики, емкости для сбора отходов), проведение экологических мероприятий и компенсацию ущерба окружающей среде»."
+            },
+            {
+                number: 15,
+                topic: "Экологическая документация",
+                question: "Какая документация должна вестись по экологическим вопросам на соревнованиях?",
+                options: [
+                    "Только протоколы результатов",
+                    "Только списки участников",
+                    "Журнал учета топлива и масел, акты о ликвидации разливов, акты передачи отходов на утилизацию, отчет контролера по экологии",
+                    "Только медицинские справки"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 10.3.2: «На соревнованиях ведется экологическая документация: журнал учета поступления и расходования топлива и масел, акты о ликвидации разливов технических жидкостей, акты передачи отходов на утилизацию, отчет контролера по охране окружающей среды. Эта документация хранится организатором не менее 3 лет»."
+            },
+            {
+                number: 16,
+                topic: "Экологический коврик - требования",
+                question: "Какие требования предъявляются к экологическим коврикам с точки зрения конструкции?",
+                options: [
+                    "Только верхняя впитывающая часть",
+                    "Только нижняя непроницаемая часть",
+                    "Двухслойная конструкция: верхняя впитывающая часть и нижняя непроницаемая часть",
+                    "Трехслойная конструкция с металлическим слоем"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 10.4.1: «Экологический коврик должен состоять из впитывающей верхней части и непроницаемой нижней части»."
+            },
+            {
+                number: 17,
+                topic: "Работа с техническими жидкостями",
+                question: "Где разрешается проводить работы с техническими жидкостями (замена масла, топлива)?",
+                options: [
+                    "В любом месте территории",
+                    "Только на специально оборудованных площадках с экологическими ковриками",
+                    "Только в закрытом парке",
+                    "Только в боксах команд"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 10.4.10: «Работы с техническими жидкостями (замена масла, топлива, промывка деталей) разрешается проводить только на специально оборудованных площадках, оснащенных экологическими ковриками, емкостями для сбора отработанных жидкостей и средствами пожаротушения»."
+            },
+            {
+                number: 18,
+                topic: "Пожарная безопасность",
+                question: "Какое экологическое оборудование обязательно должно быть на местах работы с топливом и маслами?",
+                options: [
+                    "Только экологические коврики",
+                    "Только емкости для сбора отходов",
+                    "Средства пожаротушения (огнетушители), песок, впитывающие материалы",
+                    "Только вода для мытья рук"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 10.4.11: «На всех местах работы с топливом и маслами должны быть установлены средства пожаротушения (огнетушители), а также в наличии песок или другие впитывающие материалы для быстрой ликвидации возможных разливов»."
+            },
+            {
+                number: 19,
+                topic: "Восстановление территории",
+                question: "Кто несет ответственность за восстановление территории после соревнований?",
+                options: [
+                    "Только спортсмены",
+                    "Только местные власти",
+                    "Организатор соревнования совместно с владельцем территории",
+                    "Только экологический контролер"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 10.5.3: «Организатор соревнования совместно с владельцем территории несет ответственность за восстановление нарушенных участков территории после проведения соревнований в соответствии с требованиями законодательства и условиями договора аренды или использования территории»."
+            },
+            {
+                number: 20,
+                topic: "Экологический аудит",
+                question: "Как часто проводится экологический аудит соревнований ОСФ?",
+                options: [
+                    "Только по требованию",
+                    "Только один раз в год",
+                    "На всех официальных соревнованиях, включенных в календарь ОСФ",
+                    "Только на международных соревнованиях"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 10.6.1: «ОСФ проводит экологический аудит всех официальных соревнований, включенных в календарь ОСФ. Аудит включает проверку соблюдения требований Экологического кодекса, наличия необходимого оборудования и документации, а также оценку состояния территории после соревнований»."
+            }
+        ];
+
+        // Переменные состояния
+        let isLearningMode = true;
+        let correctAnswers = 0;
+        let examResponses = [];
+        let examModeStarted = false;
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            generateCards();
+            setupEventListeners();
+        });
+
+        // Генерация карточек
+        function generateCards() {
+            const container = document.getElementById('cards-container');
+            container.innerHTML = '';
+            
+            cardsData.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+                cardElement.dataset.index = index;
+                cardElement.dataset.correct = card.correctAnswer;
+                
+                cardElement.innerHTML = `
+                    <div class="card-number">Карточка №${card.number}</div>
+                    <div class="card-topic">${card.topic}</div>
+                    <div class="question">${card.question}</div>
+                    <div class="options">
+                        ${card.options.map((option, i) => `
+                            <div class="option" data-option="${i}">${String.fromCharCode(97 + i)}. ${option}</div>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="feedback-${index}"></div>
+                    <div class="explanation" id="explanation-${index}">
+                        ${card.explanation}
+                    </div>
+                    <button class="show-explanation" id="btn-${index}" onclick="showExplanation(${index})">
+                        Показать объяснение
+                    </button>
+                `;
+                
+                container.appendChild(cardElement);
+            });
+            
+            // В режиме обучения показываем все объяснения
+            if (isLearningMode) {
+                document.getElementById('show-all-explanations').classList.remove('hidden');
+                document.querySelectorAll('.explanation').forEach(el => {
+                    el.classList.add('show');
+                });
+            }
+        }
+
+        // Настройка обработчиков событий
+        function setupEventListeners() {
+            // Переключение режимов
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    isLearningMode = this.dataset.mode === 'learning';
+                    
+                    // Сброс результатов при смене режима
+                    resetResults();
+                    
+                    // Показать/скрыть кнопку показа всех объяснений
+                    const showAllBtn = document.getElementById('show-all-explanations');
+                    if (isLearningMode) {
+                        showAllBtn.classList.remove('hidden');
+                        document.querySelectorAll('.explanation').forEach(el => {
+                            el.classList.add('show');
+                        });
+                    } else {
+                        showAllBtn.classList.add('hidden');
+                        document.querySelectorAll('.explanation').forEach(el => {
+                            el.classList.remove('show');
+                        });
+                    }
+                    
+                    // Скрыть результаты экзамена если они были показаны
+                    document.getElementById('exam-results').style.display = 'none';
+                });
+            });
+            
+            // Обработка выбора ответа
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const card = this.closest('.card');
+                    const cardIndex = parseInt(card.dataset.index);
+                    const selectedOption = parseInt(this.dataset.option);
+                    const correctOption = parseInt(card.dataset.correct);
+                    
+                    // Убираем выделение со всех вариантов
+                    card.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected', 'correct', 'incorrect');
+                    });
+                    
+                    // Добавляем выделение выбранному варианту
+                    this.classList.add('selected');
+                    
+                    // Показываем результат
+                    const feedback = document.getElementById(`feedback-${cardIndex}`);
+                    if (selectedOption === correctOption) {
+                        this.classList.add('correct');
+                        feedback.textContent = "✓ Верно! Ваш ответ правильный.";
+                        feedback.className = "feedback correct";
+                        
+                        // В режиме обучения увеличиваем счетчик правильных ответов
+                        if (isLearningMode) {
+                            correctAnswers++;
+                            updateProgress();
+                        }
+                        
+                        // В режиме экзамена сохраняем правильный ответ
+                        if (!isLearningMode && !examModeStarted) {
+                            examResponses.push({ question: cardIndex, correct: true });
+                        }
+                    } else {
+                        this.classList.add('incorrect');
+                        const correctElement = card.querySelector(`.option[data-option="${correctOption}"]`);
+                        correctElement.classList.add('correct');
+                        feedback.textContent = "✗ Неверно. Правильный ответ показан зеленым цветом.";
+                        feedback.className = "feedback incorrect";
+                        
+                        // В режиме экзамена сохраняем неправильный ответ
+                        if (!isLearningMode && !examModeStarted) {
+                            examResponses.push({ question: cardIndex, correct: false });
+                            
+                            // Если накопилось 50 ответов, показываем результаты
+                            if (examResponses.length >= 20) {
+                                showExamResults();
+                            }
+                        }
+                    }
+                    
+                    // В режиме обучения сразу показываем объяснение
+                    if (isLearningMode) {
+                        document.getElementById(`explanation-${cardIndex}`).classList.add('show');
+                        document.getElementById(`btn-${cardIndex}`).textContent = 'Скрыть объяснение';
+                    }
+                });
+            });
+            
+            // Перемешивание карточек
+            document.querySelector('.shuffle-btn').addEventListener('click', function() {
+                shuffleCards();
+            });
+            
+            // Сброс результатов
+            document.querySelector('.reset-btn').addEventListener('click', function() {
+                resetResults();
+            });
+            
+            // Показать все объяснения
+            document.getElementById('show-all-explanations').addEventListener('click', function() {
+                document.querySelectorAll('.explanation').forEach(el => {
+                    el.classList.toggle('show');
+                });
+                
+                const isShowing = document.querySelectorAll('.explanation.show').length > 0;
+                this.textContent = isShowing ? 'Скрыть все объяснения' : 'Показать все объяснения';
+            });
+            
+            // Перезапуск экзамена
+            document.getElementById('restart-btn').addEventListener('click', function() {
+                document.getElementById('exam-results').style.display = 'none';
+                resetResults();
+                examModeStarted = false;
+                examResponses = [];
+                
+                // Переключаемся в режим обучения
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector('.mode-btn[data-mode="learning"]').classList.add('active');
+                isLearningMode = true;
+                
+                // Показываем все объяснения
+                document.getElementById('show-all-explanations').classList.remove('hidden');
+                document.querySelectorAll('.explanation').forEach(el => {
+                    el.classList.add('show');
+                });
+            });
+        }
+
+        // Функция перемешивания карточек
+        function shuffleCards() {
+            const container = document.getElementById('cards-container');
+            const cards = Array.from(container.children);
+            
+            // Перемешиваем карточки
+            for (let i = cards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [cards[i], cards[j]] = [cards[j], cards[i]];
+            }
+            
+            // Очищаем контейнер и добавляем перемешанные карточки
+            container.innerHTML = '';
+            cards.forEach(card => container.appendChild(card));
+            
+            // Сбрасываем результаты
+            resetResults();
+        }
+
+        // Функция показа объяснения
+        function showExplanation(cardIndex) {
+            const explanation = document.getElementById(`explanation-${cardIndex}`);
+            const btn = document.getElementById(`btn-${cardIndex}`);
+            
+            explanation.classList.toggle('show');
+            btn.textContent = explanation.classList.contains('show') ? 'Скрыть объяснение' : 'Показать объяснение';
+        }
+
+        // Сброс результатов
+        function resetResults() {
+            correctAnswers = 0;
+            updateProgress();
+            
+            // Сбрасываем выделение и обратную связь
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            document.querySelectorAll('.feedback').forEach(fb => {
+                fb.textContent = '';
+                fb.className = 'feedback';
+            });
+            
+            // В режиме обучения показываем все объяснения
+            if (isLearningMode) {
+                document.querySelectorAll('.explanation').forEach(el => {
+                    el.classList.add('show');
+                });
+                document.getElementById('show-all-explanations').textContent = 'Скрыть все объяснения';
+            }
+            
+            // Скрываем результаты экзамена
+            document.getElementById('exam-results').style.display = 'none';
+        }
+
+        // Обновление прогресса
+        function updateProgress() {
+            document.getElementById('progress').textContent = `Правильных ответов: ${correctAnswers} из ${cardsData.length}`;
+        }
+
+        // Показ результатов экзамена
+        function showExamResults() {
+            examModeStarted = true;
+            
+            const correctCount = examResponses.filter(r => r.correct).length;
+            const incorrectCount = examResponses.length - correctCount;
+            
+            document.getElementById('results-summary').textContent = 
+                `Вы ответили правильно на ${correctCount} из ${examResponses.length} вопросов`;
+            
+            const resultsDetails = document.getElementById('results-details');
+            resultsDetails.innerHTML = '';
+            
+            // Добавляем детали по каждому вопросу
+            examResponses.forEach(response => {
+                const card = cardsData[response.question];
+                const resultItem = document.createElement('div');
+                resultItem.className = `result-item ${response.correct ? 'correct' : 'incorrect'}`;
+                resultItem.innerHTML = `
+                    <strong>Вопрос ${card.number} (${card.topic}):</strong> ${card.question}<br>
+                    ${response.correct ? '✓ Правильный ответ' : '✗ Неправильный ответ'}
+                `;
+                resultsDetails.appendChild(resultItem);
+            });
+            
+            // Показываем блок результатов
+            document.getElementById('exam-results').style.display = 'block';
+            
+            // Прокручиваем к результатам
+            document.getElementById('exam-results').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

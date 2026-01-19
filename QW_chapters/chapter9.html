@@ -1,0 +1,938 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правила мотоциклетного спорта 2025 - Глава IX</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #e74c3c;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --card-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            --border-radius: 8px;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+        
+        header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        
+        .intro {
+            background: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .intro p {
+            margin-bottom: 10px;
+        }
+        
+        .mode-selector {
+            margin: 20px 0;
+            text-align: center;
+            background: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+        
+        .mode-btn {
+            padding: 10px 20px;
+            margin: 0 10px;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .mode-btn:hover {
+            background: #2980b9;
+        }
+        
+        .mode-btn.active {
+            background: var(--success-color);
+            box-shadow: 0 0 10px rgba(39, 174, 96, 0.5);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        button {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        button:hover {
+            background: #2980b9;
+        }
+        
+        button.reset-btn {
+            background: var(--warning-color);
+        }
+        
+        .progress {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-number {
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        
+        .card-topic {
+            background: var(--secondary-color);
+            color: white;
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        
+        .question {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+        
+        .options {
+            margin-bottom: 15px;
+        }
+        
+        .option {
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .option:hover {
+            background: #e9ecef;
+            border-color: #ced4da;
+        }
+        
+        .option.selected {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            border-left: 4px solid #28a745;
+        }
+        
+        .option.correct {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            border-left: 4px solid #28a745;
+        }
+        
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 4px;
+            font-style: italic;
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+        }
+        
+        .show-explanation {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+        
+        .show-explanation:hover {
+            background: #5a6268;
+        }
+        
+        .exam-results {
+            display: none;
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+        
+        .results-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .results-summary {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        
+        .results-details {
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .result-item {
+            padding: 8px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .result-item.correct {
+            color: #28a745;
+        }
+        
+        .result-item.incorrect {
+            color: #dc3545;
+        }
+        
+        .restart-btn {
+            margin-top: 20px;
+            background: var(--primary-color);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #6c757d;
+            font-size: 0.9em;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            body {
+                padding: 10px;
+            }
+            
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Правила вида спорта "Мотоциклетный спорт" 2025</h1>
+        <p>Глава IX. Кодекс поведения</p>
+    </header>
+    
+    <div class="intro">
+        <p>Данные карточки содержат вопросы по девятой главе правил мотоциклетного спорта 2025 года. Используйте их для подготовки к экзаменам и контроля знаний.</p>
+    </div>
+    
+    <div class="mode-selector">
+        <button class="mode-btn active" data-mode="learning">Режим обучения</button>
+        <button class="mode-btn" data-mode="exam">Режим экзамена</button>
+    </div>
+    
+    <div class="controls">
+        <button class="shuffle-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16v16H4z"/>
+                <path d="M8 8l8 8"/>
+                <path d="M8 16l8-8"/>
+            </svg>
+            Перемешать карточки
+        </button>
+        <button class="reset-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74.27 9.75 9.75 0 0 1 4.48 5.73M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-.27A9.89 9.89 0 0 1 3 12"></path>
+            </svg>
+            Сбросить результаты
+        </button>
+        <button id="show-all-explanations" class="hidden">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            Показать все объяснения
+        </button>
+    </div>
+    
+    <div class="progress" id="progress">Правильных ответов: 0 из 20</div>
+    
+    <div class="cards-container" id="cards-container">
+        <!-- Карточки будут сгенерированы JavaScript -->
+    </div>
+    
+    <div class="exam-results" id="exam-results">
+        <div class="results-title">Результаты экзамена</div>
+        <div class="results-summary" id="results-summary">Вы ответили правильно на X из 20 вопросов</div>
+        <div class="results-details" id="results-details">
+            <!-- Детали результатов будут заполнены JavaScript -->
+        </div>
+        <button class="restart-btn" id="restart-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74.27 9.75 9.75 0 0 1 4.48 5.73M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-.27A9.89 9.89 0 0 1 3 12"></path>
+            </svg>
+            Пройти экзамен еще раз
+        </button>
+    </div>
+    
+    <footer>
+        <p>Официальные правила вида спорта "Мотоциклетный спорт" на 2025 год. Утверждены приказом Министерства спорта Российской Федерации от 15 ноября 2024 г. № 1119</p>
+        <p>Дата создания: 19 января 2026 года | Создано для обучения и контроля знаний</p>
+    </footer>
+
+    <script>
+        // Данные для карточек
+        const cardsData = [
+            {
+                number: 1,
+                topic: "Общие принципы",
+                question: "Какие принципы лежат в основе Кодекса поведения в мотоциклетном спорте?",
+                options: [
+                    "Победа любой ценой",
+                    "Честная игра, уважение, безопасность, ответственность",
+                    "Максимальная скорость и агрессия",
+                    "Техническое превосходство"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 28.1: «Кодекс поведения базируется на принципах честной игры, уважения к другим участникам, зрителям, официальным лицам, безопасности всех участников и ответственности за свои действия»."
+            },
+            {
+                number: 2,
+                topic: "Поведение спортсменов",
+                question: "Какое поведение спортсменов является обязательным на соревнованиях?",
+                options: [
+                    "Агрессивное поведение для демонстрации силы",
+                    "Соблюдение правил, уважение к соперникам и официальным лицам",
+                    "Игнорирование указаний судей",
+                    "Критика решений судей в прямом эфире"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 28.2: «Спортсмены обязаны демонстрировать уважительное отношение к соперникам, зрителям, официальным лицам, соблюдать правила соревнований и решения судей, а также проявлять сдержанность в высказываниях и действиях»."
+            },
+            {
+                number: 3,
+                topic: "Запрещенные действия",
+                question: "Какие действия запрещены спортсменам в рамках Кодекса поведения?",
+                options: [
+                    "Тренировки перед соревнованиями",
+                    "Общение с тренером",
+                    "Намеренное создание аварийных ситуаций, оскорбительные высказывания, неспортивное поведение",
+                    "Использование новой экипировки"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 28.3: «Запрещается намеренное создание аварийных ситуаций, опасное вождение, оскорбительные высказывания и жесты, неспортивное поведение, умышленное нарушение правил для получения преимущества»."
+            },
+            {
+                number: 4,
+                topic: "Отношение к соперникам",
+                question: "Как спортсмены должны относиться к соперникам согласно Кодексу поведения?",
+                options: [
+                    "Рассматривать их как врагов",
+                    "Игнорировать их на трассе",
+                    "Проявлять уважение, честную конкуренцию, помощь в случае аварии",
+                    "Критиковать их публично"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 28.4: «Спортсмены должны проявлять уважение к соперникам, вести честную конкуренцию, а в случае аварии или непредвиденной ситуации оказывать помощь по мере возможности»."
+            },
+            {
+                number: 5,
+                topic: "Отношение к судьям",
+                question: "Как спортсмены должны относиться к решениям судей?",
+                options: [
+                    "Игнорировать решения, с которыми не согласны",
+                    "Публично критиковать решения",
+                    "Принимать решения судей с уважением и обжаловать их только в установленном порядке",
+                    "Требовать немедленной замены судей"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 28.5: «Спортсмены обязаны принимать решения судей с уважением, даже если не согласны с ними. Неудовлетворенность решением судьи может быть выражена только через официальные каналы подачи протестов и апелляций в установленном порядке»."
+            },
+            {
+                number: 6,
+                topic: "Поведение в социальных сетях",
+                question: "Что запрещено спортсменам в социальных сетях и публичных высказываниях?",
+                options: [
+                    "Публикация фотографий с тренировок",
+                    "Общение с болельщиками",
+                    "Оскорбительные высказывания в адрес соперников, судей, организаторов и болельщиков",
+                    "Анонсирование участия в соревнованиях"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 28.6: «Спортсменам запрещается публиковать оскорбительные, клеветнические или деструктивные высказывания в социальных сетях и других публичных высказываниях в адрес соперников, судей, организаторов, болельщиков и представителей спортивных организаций»."
+            },
+            {
+                number: 7,
+                topic: "Антидопинговые требования",
+                question: "Какие обязательства по антидопинговым правилам имеют спортсмены?",
+                options: [
+                    "Игнорировать антидопинговые правила",
+                    "Соблюдать антидопинговые правила, проходить тестирование, знать запрещенные вещества",
+                    "Использовать только разрешенные препараты",
+                    "Отказываться от допинг-контроля"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 28.7: «Спортсмены обязаны строго соблюдать антидопинговые правила, проходить допинг-контроль по требованию, знать список запрещенных веществ и методов, а также нести ответственность за любые вещества, обнаруженные в их организме»."
+            },
+            {
+                number: 8,
+                topic: "Поведение зрителей",
+                question: "Какие требования предъявляются к поведению зрителей на соревнованиях?",
+                options: [
+                    "Свободное перемещение по трассе",
+                    "Агрессивная поддержка любимых спортсменов",
+                    "Соблюдение правил безопасности, уважение к участникам и другим зрителям",
+                    "Игнорирование указаний охраны"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 28.8: «Зрители обязаны соблюдать правила безопасности, находиться только в специально отведенных местах, проявлять уважение к участникам, другим зрителям и официальным лицам, а также не создавать помех для проведения соревнований»."
+            },
+            {
+                number: 9,
+                topic: "Техническая безопасность",
+                question: "Какие требования по технической безопасности должны соблюдать участники?",
+                options: [
+                    "Использовать максимально быструю технику",
+                    "Игнорировать технические требования",
+                    "Соблюдать технические требования к мототехнике и экипировке, проходить технический контроль",
+                    "Модифицировать технику для повышения скорости"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 28.9: «Все участники обязаны соблюдать технические требования к мототехнике и спортивной экипировке, проходить технический контроль, а также обеспечивать безопасность своей техники на протяжении всего соревнования»."
+            },
+            {
+                number: 10,
+                topic: "Экологическая ответственность",
+                question: "Какие экологические требования должны соблюдать участники соревнований?",
+                options: [
+                    "Игнорировать экологические нормы",
+                    "Соблюдать экологические требования, использовать экологические коврики, не оставлять мусор",
+                    "Использовать только новые материалы",
+                    "Утилизировать отходы в любом месте"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 28.10: «Участники соревнований обязаны соблюдать экологические требования, использовать экологические коврики при работе с мототехникой, не оставлять мусор и технические жидкости на территории соревнований, а также следовать указаниям экологического контролера»."
+            },
+            {
+                number: 11,
+                topic: "Медицинские требования",
+                question: "Какие медицинские требования предъявляются к спортсменам?",
+                options: [
+                    "Отсутствие медицинских противопоказаний, наличие медицинской справки о допуске",
+                    "Только отсутствие травм",
+                    "Только наличие страховки",
+                    "Только прохождение медосмотра в день соревнования"
+                ],
+                correctAnswer: 0,
+                explanation: "Согласно пункту 28.11: «Спортсмены обязаны не иметь медицинских противопоказаний к занятиям мотоциклетным спортом, иметь действующую медицинскую справку о допуске к соревнованиям, а также проходить обязательный медицинский осмотр перед началом соревнований»."
+            },
+            {
+                number: 12,
+                topic: "Ответственность тренеров",
+                question: "Какие обязанности по Кодексу поведения имеют тренеры?",
+                options: [
+                    "Только подготовка спортсменов к соревнованиям",
+                    "Только контроль технического состояния мототехники",
+                    "Воспитание спортсменов в духе честной игры, контроль поведения, соблюдение правил",
+                    "Только организация тренировочного процесса"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 28.12: «Тренеры несут ответственность за воспитание спортсменов в духе честной игры, контроль их поведения на и вне трассы, соблюдение ими правил и норм Кодекса поведения, а также за обеспечение безопасности тренировочного процесса»."
+            },
+            {
+                number: 13,
+                topic: "Ответственность механиков",
+                question: "Какие обязанности по Кодексу поведения имеют механики?",
+                options: [
+                    "Только ремонт мототехники",
+                    "Только настройка мототехники",
+                    "Обеспечение технической безопасности, соблюдение правил технического контроля, экологических требований",
+                    "Только подготовка запчастей"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 28.13: «Механики обязаны обеспечивать техническую безопасность мототехники, соблюдать правила технического контроля, экологические требования при работе с техникой, а также проявлять уважение к другим участникам и официальным лицам»."
+            },
+            {
+                number: 14,
+                topic: "Санкции за нарушение",
+                question: "Какие санкции могут применяться за нарушение Кодекса поведения?",
+                options: [
+                    "Только предупреждение",
+                    "Только штраф",
+                    "Предупреждение, штраф, дисквалификация, временная или постоянная спортивная дисквалификация",
+                    "Только исключение из соревнования"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 28.14: «За нарушение Кодекса поведения могут применяться следующие санкции: предупреждение, штраф, дисквалификация с отдельного заезда или соревнования в целом, временная или постоянная спортивная дисквалификация, а также иные меры в соответствии с дисциплинарным регламентом ОСФ»."
+            },
+            {
+                number: 15,
+                topic: "Рассмотрение нарушений",
+                question: "Кем рассматриваются нарушения Кодекса поведения?",
+                options: [
+                    "Только главным судьей соревнования",
+                    "Только организатором",
+                    "Жюри соревнования, а в серьезных случаях – Комиссией по дисциплине и разрешению споров ОСФ",
+                    "Только спортивным комиссаром"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 28.15: «Нарушения Кодекса поведения рассматриваются Жюри соревнования в оперативном порядке. В случае серьезных нарушений или повторных нарушений вопрос может быть передан на рассмотрение Комиссии по дисциплине и разрешению споров ОСФ»."
+            },
+            {
+                number: 16,
+                topic: "Обжалование решений",
+                question: "Как можно обжаловать решение о нарушении Кодекса поведения?",
+                options: [
+                    "В устной форме любому судье",
+                    "Через социальные сети",
+                    "В письменной форме в установленном порядке через подачу апелляции в Комиссию по дисциплине и разрешению споров ОСФ",
+                    "Напрямую в Министерство спорта РФ"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 28.16: «Решения о нарушении Кодекса поведения могут быть обжалованы в письменной форме в установленном порядке через подачу апелляции в Комиссию по дисциплине и разрешению споров ОСФ в течение 10 рабочих дней со дня получения решения»."
+            },
+            {
+                number: 17,
+                topic: "Пропаганда здорового образа жизни",
+                question: "Какую роль должны играть спортсмены в пропаганде здорового образа жизни?",
+                options: [
+                    "Игнорировать вопросы здоровья",
+                    "Демонстрировать пример здорового образа жизни, отказ от вредных привычек",
+                    "Употреблять алкоголь после соревнований",
+                    "Курить на территории соревнований"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 28.17: «Спортсмены, тренеры и другие участники мотоциклетного спорта должны служить примером здорового образа жизни, отказываться от курения, употребления алкоголя и наркотических веществ, а также пропагандировать здоровый образ жизни среди болельщиков и молодежи»."
+            },
+            {
+                number: 18,
+                topic: "Отношение к болельщикам",
+                question: "Как участники должны относиться к болельщикам и зрителям?",
+                options: [
+                    "Игнорировать их",
+                    "Критиковать их решения",
+                    "Проявлять уважение, благодарность, поддерживать диалог, соблюдать границы",
+                    "Требовать от них агрессивной поддержки"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 28.18: «Все участники соревнований должны проявлять уважение и благодарность к болельщикам и зрителям, поддерживать конструктивный диалог, а также соблюдать установленные границы общения и поведения»."
+            },
+            {
+                number: 19,
+                topic: "Коммерческая деятельность",
+                question: "Какие ограничения существуют в коммерческой деятельности участников на соревнованиях?",
+                options: [
+                    "Полная свобода коммерческой деятельности",
+                    "Запрет на любую коммерческую деятельность",
+                    "Соблюдение прав на коммерческие права, запрет на несанкционированную рекламу и продажу товаров",
+                    "Только запрет на продажу сувениров"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 28.19: «Участники соревнований обязаны соблюдать права на коммерческие права организатора и ОСФ, запрещается проведение несанкционированной рекламной деятельности, продажа товаров и услуг без разрешения организатора»."
+            },
+            {
+                number: 20,
+                topic: "Конфиденциальность",
+                question: "Что должны соблюдать участники в отношении конфиденциальной информации?",
+                options: [
+                    "Публичное обсуждение всех решений",
+                    "Распространение личной информации о других участниках",
+                    "Конфиденциальность служебной и личной информации, полученной в ходе соревнований",
+                    "Публикация протоколов до их официального объявления"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 28.20: «Участники обязаны соблюдать конфиденциальность в отношении служебной и личной информации, полученной в ходе соревнований, за исключением случаев, когда раскрытие такой информации требуется по закону или является необходимым для обеспечения прозрачности соревнований»."
+            }
+        ];
+
+        // Переменные состояния
+        let isLearningMode = true;
+        let correctAnswers = 0;
+        let examResponses = [];
+        let examModeStarted = false;
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            generateCards();
+            setupEventListeners();
+        });
+
+        // Генерация карточек
+        function generateCards() {
+            const container = document.getElementById('cards-container');
+            container.innerHTML = '';
+            
+            cardsData.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+                cardElement.dataset.index = index;
+                cardElement.dataset.correct = card.correctAnswer;
+                
+                cardElement.innerHTML = `
+                    <div class="card-number">Карточка №${card.number}</div>
+                    <div class="card-topic">${card.topic}</div>
+                    <div class="question">${card.question}</div>
+                    <div class="options">
+                        ${card.options.map((option, i) => `
+                            <div class="option" data-option="${i}">${String.fromCharCode(97 + i)}. ${option}</div>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="feedback-${index}"></div>
+                    <div class="explanation" id="explanation-${index}">
+                        ${card.explanation}
+                    </div>
+                    <button class="show-explanation" id="btn-${index}" onclick="showExplanation(${index})">
+                        Показать объяснение
+                    </button>
+                `;
+                
+                container.appendChild(cardElement);
+            });
+            
+            // В режиме обучения показываем все объяснения
+            if (isLearningMode) {
+                document.getElementById('show-all-explanations').classList.remove('hidden');
+                document.querySelectorAll('.explanation').forEach(el => {
+                    el.classList.add('show');
+                });
+            }
+        }
+
+        // Настройка обработчиков событий
+        function setupEventListeners() {
+            // Переключение режимов
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    isLearningMode = this.dataset.mode === 'learning';
+                    
+                    // Сброс результатов при смене режима
+                    resetResults();
+                    
+                    // Показать/скрыть кнопку показа всех объяснений
+                    const showAllBtn = document.getElementById('show-all-explanations');
+                    if (isLearningMode) {
+                        showAllBtn.classList.remove('hidden');
+                        document.querySelectorAll('.explanation').forEach(el => {
+                            el.classList.add('show');
+                        });
+                    } else {
+                        showAllBtn.classList.add('hidden');
+                        document.querySelectorAll('.explanation').forEach(el => {
+                            el.classList.remove('show');
+                        });
+                    }
+                    
+                    // Скрыть результаты экзамена если они были показаны
+                    document.getElementById('exam-results').style.display = 'none';
+                });
+            });
+            
+            // Обработка выбора ответа
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const card = this.closest('.card');
+                    const cardIndex = parseInt(card.dataset.index);
+                    const selectedOption = parseInt(this.dataset.option);
+                    const correctOption = parseInt(card.dataset.correct);
+                    
+                    // Убираем выделение со всех вариантов
+                    card.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected', 'correct', 'incorrect');
+                    });
+                    
+                    // Добавляем выделение выбранному варианту
+                    this.classList.add('selected');
+                    
+                    // Показываем результат
+                    const feedback = document.getElementById(`feedback-${cardIndex}`);
+                    if (selectedOption === correctOption) {
+                        this.classList.add('correct');
+                        feedback.textContent = "✓ Верно! Ваш ответ правильный.";
+                        feedback.className = "feedback correct";
+                        
+                        // В режиме обучения увеличиваем счетчик правильных ответов
+                        if (isLearningMode) {
+                            correctAnswers++;
+                            updateProgress();
+                        }
+                        
+                        // В режиме экзамена сохраняем правильный ответ
+                        if (!isLearningMode && !examModeStarted) {
+                            examResponses.push({ question: cardIndex, correct: true });
+                        }
+                    } else {
+                        this.classList.add('incorrect');
+                        const correctElement = card.querySelector(`.option[data-option="${correctOption}"]`);
+                        correctElement.classList.add('correct');
+                        feedback.textContent = "✗ Неверно. Правильный ответ показан зеленым цветом.";
+                        feedback.className = "feedback incorrect";
+                        
+                        // В режиме экзамена сохраняем неправильный ответ
+                        if (!isLearningMode && !examModeStarted) {
+                            examResponses.push({ question: cardIndex, correct: false });
+                            
+                            // Если накопилось 50 ответов, показываем результаты
+                            if (examResponses.length >= 20) {
+                                showExamResults();
+                            }
+                        }
+                    }
+                    
+                    // В режиме обучения сразу показываем объяснение
+                    if (isLearningMode) {
+                        document.getElementById(`explanation-${cardIndex}`).classList.add('show');
+                        document.getElementById(`btn-${cardIndex}`).textContent = 'Скрыть объяснение';
+                    }
+                });
+            });
+            
+            // Перемешивание карточек
+            document.querySelector('.shuffle-btn').addEventListener('click', function() {
+                shuffleCards();
+            });
+            
+            // Сброс результатов
+            document.querySelector('.reset-btn').addEventListener('click', function() {
+                resetResults();
+            });
+            
+            // Показать все объяснения
+            document.getElementById('show-all-explanations').addEventListener('click', function() {
+                document.querySelectorAll('.explanation').forEach(el => {
+                    el.classList.toggle('show');
+                });
+                
+                const isShowing = document.querySelectorAll('.explanation.show').length > 0;
+                this.textContent = isShowing ? 'Скрыть все объяснения' : 'Показать все объяснения';
+            });
+            
+            // Перезапуск экзамена
+            document.getElementById('restart-btn').addEventListener('click', function() {
+                document.getElementById('exam-results').style.display = 'none';
+                resetResults();
+                examModeStarted = false;
+                examResponses = [];
+                
+                // Переключаемся в режим обучения
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector('.mode-btn[data-mode="learning"]').classList.add('active');
+                isLearningMode = true;
+                
+                // Показываем все объяснения
+                document.getElementById('show-all-explanations').classList.remove('hidden');
+                document.querySelectorAll('.explanation').forEach(el => {
+                    el.classList.add('show');
+                });
+            });
+        }
+
+        // Функция перемешивания карточек
+        function shuffleCards() {
+            const container = document.getElementById('cards-container');
+            const cards = Array.from(container.children);
+            
+            // Перемешиваем карточки
+            for (let i = cards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [cards[i], cards[j]] = [cards[j], cards[i]];
+            }
+            
+            // Очищаем контейнер и добавляем перемешанные карточки
+            container.innerHTML = '';
+            cards.forEach(card => container.appendChild(card));
+            
+            // Сбрасываем результаты
+            resetResults();
+        }
+
+        // Функция показа объяснения
+        function showExplanation(cardIndex) {
+            const explanation = document.getElementById(`explanation-${cardIndex}`);
+            const btn = document.getElementById(`btn-${cardIndex}`);
+            
+            explanation.classList.toggle('show');
+            btn.textContent = explanation.classList.contains('show') ? 'Скрыть объяснение' : 'Показать объяснение';
+        }
+
+        // Сброс результатов
+        function resetResults() {
+            correctAnswers = 0;
+            updateProgress();
+            
+            // Сбрасываем выделение и обратную связь
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            document.querySelectorAll('.feedback').forEach(fb => {
+                fb.textContent = '';
+                fb.className = 'feedback';
+            });
+            
+            // В режиме обучения показываем все объяснения
+            if (isLearningMode) {
+                document.querySelectorAll('.explanation').forEach(el => {
+                    el.classList.add('show');
+                });
+                document.getElementById('show-all-explanations').textContent = 'Скрыть все объяснения';
+            }
+            
+            // Скрываем результаты экзамена
+            document.getElementById('exam-results').style.display = 'none';
+        }
+
+        // Обновление прогресса
+        function updateProgress() {
+            document.getElementById('progress').textContent = `Правильных ответов: ${correctAnswers} из ${cardsData.length}`;
+        }
+
+        // Показ результатов экзамена
+        function showExamResults() {
+            examModeStarted = true;
+            
+            const correctCount = examResponses.filter(r => r.correct).length;
+            const incorrectCount = examResponses.length - correctCount;
+            
+            document.getElementById('results-summary').textContent = 
+                `Вы ответили правильно на ${correctCount} из ${examResponses.length} вопросов`;
+            
+            const resultsDetails = document.getElementById('results-details');
+            resultsDetails.innerHTML = '';
+            
+            // Добавляем детали по каждому вопросу
+            examResponses.forEach(response => {
+                const card = cardsData[response.question];
+                const resultItem = document.createElement('div');
+                resultItem.className = `result-item ${response.correct ? 'correct' : 'incorrect'}`;
+                resultItem.innerHTML = `
+                    <strong>Вопрос ${card.number} (${card.topic}):</strong> ${card.question}<br>
+                    ${response.correct ? '✓ Правильный ответ' : '✗ Неправильный ответ'}
+                `;
+                resultsDetails.appendChild(resultItem);
+            });
+            
+            // Показываем блок результатов
+            document.getElementById('exam-results').style.display = 'block';
+            
+            // Прокручиваем к результатам
+            document.getElementById('exam-results').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

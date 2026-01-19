@@ -1,0 +1,938 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правила мотоциклетного спорта 2025 - Глава III</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #e74c3c;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --card-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            --border-radius: 8px;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+        
+        header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        
+        .intro {
+            background: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .intro p {
+            margin-bottom: 10px;
+        }
+        
+        .mode-selector {
+            margin: 20px 0;
+            text-align: center;
+            background: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+        
+        .mode-btn {
+            padding: 10px 20px;
+            margin: 0 10px;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .mode-btn:hover {
+            background: #2980b9;
+        }
+        
+        .mode-btn.active {
+            background: var(--success-color);
+            box-shadow: 0 0 10px rgba(39, 174, 96, 0.5);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        button {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        button:hover {
+            background: #2980b9;
+        }
+        
+        button.reset-btn {
+            background: var(--warning-color);
+        }
+        
+        .progress {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-number {
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        
+        .card-topic {
+            background: var(--secondary-color);
+            color: white;
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        
+        .question {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+        
+        .options {
+            margin-bottom: 15px;
+        }
+        
+        .option {
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .option:hover {
+            background: #e9ecef;
+            border-color: #ced4da;
+        }
+        
+        .option.selected {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            border-left: 4px solid #28a745;
+        }
+        
+        .option.correct {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            border-left: 4px solid #28a745;
+        }
+        
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 4px;
+            font-style: italic;
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+        }
+        
+        .show-explanation {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+        
+        .show-explanation:hover {
+            background: #5a6268;
+        }
+        
+        .exam-results {
+            display: none;
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+        
+        .results-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .results-summary {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        
+        .results-details {
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .result-item {
+            padding: 8px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .result-item.correct {
+            color: #28a745;
+        }
+        
+        .result-item.incorrect {
+            color: #dc3545;
+        }
+        
+        .restart-btn {
+            margin-top: 20px;
+            background: var(--primary-color);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #6c757d;
+            font-size: 0.9em;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            body {
+                padding: 10px;
+            }
+            
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Правила вида спорта "Мотоциклетный спорт" 2025</h1>
+        <p>Глава III. Классификация соревнований</p>
+    </header>
+    
+    <div class="intro">
+        <p>Данные карточки содержат вопросы по третьей главе правил мотоциклетного спорта 2025 года. Используйте их для подготовки к экзаменам и контроля знаний.</p>
+    </div>
+    
+    <div class="mode-selector">
+        <button class="mode-btn active" data-mode="learning">Режим обучения</button>
+        <button class="mode-btn" data-mode="exam">Режим экзамена</button>
+    </div>
+    
+    <div class="controls">
+        <button class="shuffle-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16v16H4z"/>
+                <path d="M8 8l8 8"/>
+                <path d="M8 16l8-8"/>
+            </svg>
+            Перемешать карточки
+        </button>
+        <button class="reset-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74.27 9.75 9.75 0 0 1 4.48 5.73M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-.27A9.89 9.89 0 0 1 3 12"></path>
+            </svg>
+            Сбросить результаты
+        </button>
+        <button id="show-all-explanations" class="hidden">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            Показать все объяснения
+        </button>
+    </div>
+    
+    <div class="progress" id="progress">Правильных ответов: 0 из 20</div>
+    
+    <div class="cards-container" id="cards-container">
+        <!-- Карточки будут сгенерированы JavaScript -->
+    </div>
+    
+    <div class="exam-results" id="exam-results">
+        <div class="results-title">Результаты экзамена</div>
+        <div class="results-summary" id="results-summary">Вы ответили правильно на X из 20 вопросов</div>
+        <div class="results-details" id="results-details">
+            <!-- Детали результатов будут заполнены JavaScript -->
+        </div>
+        <button class="restart-btn" id="restart-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74.27 9.75 9.75 0 0 1 4.48 5.73M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-.27A9.89 9.89 0 0 1 3 12"></path>
+            </svg>
+            Пройти экзамен еще раз
+        </button>
+    </div>
+    
+    <footer>
+        <p>Официальные правила вида спорта "Мотоциклетный спорт" на 2025 год. Утверждены приказом Министерства спорта Российской Федерации от 15 ноября 2024 г. № 1119</p>
+        <p>Дата создания: 19 января 2026 года | Создано для обучения и контроля знаний</p>
+    </footer>
+
+    <script>
+        // Данные для карточек
+        const cardsData = [
+            {
+                number: 1,
+                topic: "Классификация соревнований",
+                question: "Какие соревнования считаются официальными в мотоциклетном спорте?",
+                options: [
+                    "Все соревнования, проводимые на территории России",
+                    "Соревнования, включенные в календарные планы ОСФ и Министерства спорта РФ",
+                    "Только международные соревнования",
+                    "Соревнования, организованные спортивными клубами"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 23.1: «Официальными соревнованиями являются официальные всероссийские и международные соревнования, включенные в календарные планы ОСФ и Министерства спорта РФ, а также официальные соревнования субъектов Российской Федерации, муниципальных образований, городских округов, включенные в календарь ОСФ»."
+            },
+            {
+                number: 2,
+                topic: "Классификация соревнований",
+                question: "Как подразделяются соревнования по уровню проведения?",
+                options: [
+                    "Международные, республиканские, областные",
+                    "Международные, всероссийские, соревнования субъектов РФ, муниципальных образований, городских округов, официальные соревнования организаций",
+                    "Всероссийские, региональные, местные",
+                    "Гран-при, чемпионаты, кубки"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 23.2: «Соревнования по мотоциклетному спорту подразделяются на: 1) международные – соревнования с участием иностранных спортсменов и (или) судей, проводимые в соответствии с календарем ФИМ и ОСФ; 2) всероссийские; 3) соревнования субъектов Российской Федерации; 4) соревнования муниципальных образований, городских округов; 5) официальные соревнования организаций»."
+            },
+            {
+                number: 3,
+                topic: "Всероссийские соревнования",
+                question: "Какие соревнования относятся к всероссийским?",
+                options: [
+                    "Только чемпионаты и первенства России",
+                    "Чемпионаты России, первенства России, Кубок России, этапы Кубка России, этапы Чемпионата России, Первенства России среди юношей и девушек, этапы Первенства России среди юношей и девушек, этапы Кубка России среди юношей и девушек, этапы Кубка России, этапы Чемпионата мира",
+                    "Любые соревнования на территории России",
+                    "Соревнования с участием спортсменов из разных регионов"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 24.1: «Всероссийские соревнования: - Чемпионаты России; - Первенства России; - Кубок России; - этапы Кубка России; - этапы Чемпионата России; - Первенства России среди юношей и девушек; - этапы Первенства России среди юношей и девушек; - этапы Кубка России среди юношей и девушек; - этапы Чемпионата мира»."
+            },
+            {
+                number: 4,
+                topic: "Чемпионаты и первенства",
+                question: "В чем основное отличие чемпионата от первенства?",
+                options: [
+                    "Чемпионат проводится на международном уровне, первенство - на национальном",
+                    "Чемпионат проводится для спортсменов, имеющих спортивные звания и разряды, первенство – для спортсменов-разрядников, а также для юношей и девушек",
+                    "Чемпионат проводится ежегодно, первенство - раз в 4 года",
+                    "Чемпионат проводится только по лицензии ФИМ, первенство - по лицензии ОСФ"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 24.1.4: «Чемпионаты России проводятся для спортсменов, имеющих спортивные звания и разряды. Первенства России проводятся для спортсменов-разрядников, а также для юношей и девушек»."
+            },
+            {
+                number: 5,
+                topic: "Этапы соревнований",
+                question: "Что такое этап соревнования?",
+                options: [
+                    "Отдельный заезд в рамках соревнования",
+                    "Соревнование в рамках серии соревнований, являющееся составной частью, результаты которого идут в зачет серии",
+                    "Тренировочный день перед основным соревнованием",
+                    "Квалификационные заезды"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 24.1.2: «Этапы соревнований – соревнования, являющиеся составной частью серии соревнований, результаты которых идут в зачет серии»."
+            },
+            {
+                number: 6,
+                topic: "Кубок России",
+                question: "Как определяется победитель Кубка России?",
+                options: [
+                    "Победитель последнего этапа Кубка России",
+                    "Спортсмен, набравший наибольшую сумму очков на всех этапах Кубка России",
+                    "Победитель первого этапа Кубка России",
+                    "Спортсмен, имеющий наибольшее количество побед на отдельных этапах"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 24.1.3: «Победители в личном и командном первенстве в Кубке России определяются по наибольшей сумме очков, полученных спортсменами и командами на всех этапах Кубка России»."
+            },
+            {
+                number: 7,
+                topic: "Этапы Чемпионата мира в России",
+                question: "Какие соревнования проводятся в рамках этапа Чемпионата мира на территории России?",
+                options: [
+                    "Только соревнования чемпионов мира",
+                    "Соревнования для определения участников Чемпионата мира",
+                    "Соревнования, включенные в календарь ФИМ для определения Чемпионов мира и призеров, проводимые на территории России",
+                    "Соревнования для подготовки к Чемпионату мира"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 24.1.9: «Этапы Чемпионата мира – соревнования, включенные в календарь ФИМ для определения Чемпионов мира и призеров, проводимые на территории России»."
+            },
+            {
+                number: 8,
+                topic: "Соревнования субъектов РФ",
+                question: "Какие соревнования относятся к соревнованиям субъектов Российской Федерации?",
+                options: [
+                    "Только чемпионаты областей и республик",
+                    "Чемпионаты, первенства, Кубки субъектов Российской Федерации, этапы Кубков субъектов Российской Федерации, этапы чемпионатов и первенств субъектов Российской Федерации",
+                    "Любые соревнования в регионах",
+                    "Соревнования, организованные региональными федерациями"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 25.1: «Соревнования субъектов Российской Федерации: - чемпионаты субъектов Российской Федерации; - первенства субъектов Российской Федерации; - Кубки субъектов Российской Федерации; - этапы Кубков субъектов Российской Федерации; - этапы чемпионатов и первенств субъектов Российской Федерации»."
+            },
+            {
+                number: 9,
+                topic: "Соревнования муниципальных образований",
+                question: "Как определяется победитель чемпионата муниципального образования?",
+                options: [
+                    "По результатам одного соревнования",
+                    "По результатам серии соревнований, включенных в программу чемпионата",
+                    "По наибольшему количеству побед",
+                    "По решению судейской коллегии"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 26.1.1: «Победители в личном и командном первенстве в Чемпионатах и Первенствах муниципальных образований, городских округов определяются по результатам одного или серии соревнований, включенных в программу чемпионата/первенства в соответствии с положением»."
+            },
+            {
+                number: 10,
+                topic: "Международные соревнования",
+                question: "Какие международные соревнования проводятся на территории России?",
+                options: [
+                    "Только Чемпионаты мира",
+                    "Чемпионаты мира, этапы Чемпионата мира, Кубки мира, этапы Кубка мира, международные турниры и другие соревнования, проводимые по решению ФИМ и ОСФ",
+                    "Только товарищеские матчи",
+                    "Соревнования по приглашению"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 27.1: «На территории Российской Федерации могут проводиться следующие международные соревнования: 1) Чемпионаты мира; 2) этапы Чемпионата мира; 3) Кубки мира; 4) этапы Кубка мира; 5) международные турниры; 6) другие соревнования, проводимые по решению ФИМ и ОСФ»."
+            },
+            {
+                number: 11,
+                topic: "Разрядные нормативы",
+                question: "Для присвоения каких спортивных званий проводятся соревнования?",
+                options: [
+                    "Только для звания Мастер спорта",
+                    "Для званий Мастер спорта России международного класса, Мастер спорта России, Кандидат в мастера спорта",
+                    "Для всех спортивных званий",
+                    "Только для юношеских званий"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 24.3: «Соревнования проводятся для присвоения спортивных званий и разрядов в соответствии с ЕВСКС и положением о порядке присвоения спортивных званий и разрядов в виде спорта «мотоциклетный спорт» в РФ, утвержденным ОСФ»."
+            },
+            {
+                number: 12,
+                topic: "Официальные соревнования организаций",
+                question: "Какие соревнования относятся к официальным соревнованиям организаций?",
+                options: [
+                    "Соревнования, проводимые спортивными клубами",
+                    "Соревнования, проводимые организациями для своих работников и членов организаций, а также для работников других организаций и членов других организаций",
+                    "Любые коммерческие соревнования",
+                    "Соревнования, проводимые по лицензии"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно пункту 28.1: «К официальным соревнованиям организаций относятся соревнования, проводимые организациями для своих работников и членов организаций, а также для работников других организаций и членов других организаций»."
+            },
+            {
+                number: 13,
+                topic: "Статус соревнований",
+                question: "Что определяет статус соревнования?",
+                options: [
+                    "Количество участников",
+                    "Уровень судейской коллегии",
+                    "Календарный план, в который включено соревнование",
+                    "Место проведения соревнования"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно разделу III, статус соревнования определяется календарным планом, в который оно включено - календарь ОСФ, Министерства спорта РФ, календарь субъекта РФ и т.д."
+            },
+            {
+                number: 14,
+                topic: "Дублирующие соревнования",
+                question: "Какие соревнования считаются дублирующими?",
+                options: [
+                    "Соревнования, проводимые в один день",
+                    "Соревнования, проводимые по одной дисциплине в один день на территории одного региона",
+                    "Соревнования одного уровня",
+                    "Соревнования с одинаковыми названиями"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно общим принципам организации соревнований, дублирующими считаются соревнования, проводимые по одной и той же дисциплине в один и тот же день на территории одного региона, что создает конкуренцию и снижает качество соревнований."
+            },
+            {
+                number: 15,
+                topic: "Серии соревнований",
+                question: "Что такое серия соревнований?",
+                options: [
+                    "Несколько соревнований в один день",
+                    "Несколько соревнований, объединенных общей целью и правилами определения победителей",
+                    "Соревнования одного уровня",
+                    "Соревнования по одной дисциплине"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно общим положениям, серия соревнований - это несколько соревнований (этапов), объединенных общей целью (определение чемпиона, обладателя Кубка и т.д.) и едиными правилами подсчета результатов."
+            },
+            {
+                number: 16,
+                topic: "Проведение соревнований",
+                question: "Кто определяет порядок проведения соревнований?",
+                options: [
+                    "Организатор соревнования",
+                    "Судейская коллегия",
+                    "Правила вида спорта и положение (регламент) соревнования",
+                    "Министерство спорта РФ"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно общим принципам, порядок проведения соревнований определяется Правилами вида спорта «мотоциклетный спорт» и положением (регламентом) соревнования, утвержденным в установленном порядке."
+            },
+            {
+                number: 17,
+                topic: "Заявки на участие",
+                question: "Как подаются заявки на участие в официальных соревнованиях?",
+                options: [
+                    "Устно в день соревнования",
+                    "В электронной форме за 1 день до соревнования",
+                    "В установленные положением (регламентом) сроки в письменной (электронной) форме",
+                    "Через тренера команды"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 29.1: «Заявки на участие в соревнованиях подаются в установленные положением (регламентом) сроки в письменной (электронной) форме с приложением необходимых документов»."
+            },
+            {
+                number: 18,
+                topic: "Документы для участия",
+                question: "Какие документы необходимы для участия в соревнованиях?",
+                options: [
+                    "Только лицензия спортсмена",
+                    "Паспорт и медицинская справка",
+                    "Лицензия спортсмена, медицинская справка, страховка, допуск врача",
+                    "Заявка от команды"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 29.2: «К заявке прилагаются: копия страхового полиса, копия лицензии спортсмена, медицинская справка о допуске к соревнованиям по мотоциклетному спорту, справка о прохождении допинг-контроля (если требуется)»."
+            },
+            {
+                number: 19,
+                topic: "Классы мотоциклов",
+                question: "Как определяются классы мотоциклов для соревнований?",
+                options: [
+                    "По году выпуска",
+                    "По объему двигателя и типу мотоцикла",
+                    "По цвету мотоцикла",
+                    "По стоимости мотоцикла"
+                ],
+                correctAnswer: 1,
+                explanation: "Согласно Правилам, классы мотоциклов для соревнований определяются по объему двигателя, типу мотоцикла (спортивный, кроссовый, эндуро и т.д.), категории (женщины, юноши) и другим техническим характеристикам, указанным в специальных требованиях для каждой дисциплины."
+            },
+            {
+                number: 20,
+                topic: "Система награждения",
+                question: "Как награждаются победители и призеры соревнований?",
+                options: [
+                    "Только денежными призами",
+                    "Грамотами и благодарностями",
+                    "Медалями, дипломами, кубками и другими наградами в соответствии с положением о соревновании",
+                    "Спортивными званиями"
+                ],
+                correctAnswer: 2,
+                explanation: "Согласно пункту 38.1: «Победители и призеры соревнований награждаются медалями, дипломами, кубками, грамотами и другими наградами в соответствии с положением о соревновании»."
+            }
+        ];
+
+        // Переменные состояния
+        let isLearningMode = true;
+        let correctAnswers = 0;
+        let examResponses = [];
+        let examModeStarted = false;
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            generateCards();
+            setupEventListeners();
+        });
+
+        // Генерация карточек
+        function generateCards() {
+            const container = document.getElementById('cards-container');
+            container.innerHTML = '';
+            
+            cardsData.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+                cardElement.dataset.index = index;
+                cardElement.dataset.correct = card.correctAnswer;
+                
+                cardElement.innerHTML = `
+                    <div class="card-number">Карточка №${card.number}</div>
+                    <div class="card-topic">${card.topic}</div>
+                    <div class="question">${card.question}</div>
+                    <div class="options">
+                        ${card.options.map((option, i) => `
+                            <div class="option" data-option="${i}">${String.fromCharCode(97 + i)}. ${option}</div>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="feedback-${index}"></div>
+                    <div class="explanation" id="explanation-${index}">
+                        ${card.explanation}
+                    </div>
+                    <button class="show-explanation" id="btn-${index}" onclick="showExplanation(${index})">
+                        Показать объяснение
+                    </button>
+                `;
+                
+                container.appendChild(cardElement);
+            });
+            
+            // В режиме обучения показываем все объяснения
+            if (isLearningMode) {
+                document.getElementById('show-all-explanations').classList.remove('hidden');
+                document.querySelectorAll('.explanation').forEach(el => {
+                    el.classList.add('show');
+                });
+            }
+        }
+
+        // Настройка обработчиков событий
+        function setupEventListeners() {
+            // Переключение режимов
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    isLearningMode = this.dataset.mode === 'learning';
+                    
+                    // Сброс результатов при смене режима
+                    resetResults();
+                    
+                    // Показать/скрыть кнопку показа всех объяснений
+                    const showAllBtn = document.getElementById('show-all-explanations');
+                    if (isLearningMode) {
+                        showAllBtn.classList.remove('hidden');
+                        document.querySelectorAll('.explanation').forEach(el => {
+                            el.classList.add('show');
+                        });
+                    } else {
+                        showAllBtn.classList.add('hidden');
+                        document.querySelectorAll('.explanation').forEach(el => {
+                            el.classList.remove('show');
+                        });
+                    }
+                    
+                    // Скрыть результаты экзамена если они были показаны
+                    document.getElementById('exam-results').style.display = 'none';
+                });
+            });
+            
+            // Обработка выбора ответа
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const card = this.closest('.card');
+                    const cardIndex = parseInt(card.dataset.index);
+                    const selectedOption = parseInt(this.dataset.option);
+                    const correctOption = parseInt(card.dataset.correct);
+                    
+                    // Убираем выделение со всех вариантов
+                    card.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected', 'correct', 'incorrect');
+                    });
+                    
+                    // Добавляем выделение выбранному варианту
+                    this.classList.add('selected');
+                    
+                    // Показываем результат
+                    const feedback = document.getElementById(`feedback-${cardIndex}`);
+                    if (selectedOption === correctOption) {
+                        this.classList.add('correct');
+                        feedback.textContent = "✓ Верно! Ваш ответ правильный.";
+                        feedback.className = "feedback correct";
+                        
+                        // В режиме обучения увеличиваем счетчик правильных ответов
+                        if (isLearningMode) {
+                            correctAnswers++;
+                            updateProgress();
+                        }
+                        
+                        // В режиме экзамена сохраняем правильный ответ
+                        if (!isLearningMode && !examModeStarted) {
+                            examResponses.push({ question: cardIndex, correct: true });
+                        }
+                    } else {
+                        this.classList.add('incorrect');
+                        const correctElement = card.querySelector(`.option[data-option="${correctOption}"]`);
+                        correctElement.classList.add('correct');
+                        feedback.textContent = "✗ Неверно. Правильный ответ показан зеленым цветом.";
+                        feedback.className = "feedback incorrect";
+                        
+                        // В режиме экзамена сохраняем неправильный ответ
+                        if (!isLearningMode && !examModeStarted) {
+                            examResponses.push({ question: cardIndex, correct: false });
+                            
+                            // Если накопилось 50 ответов, показываем результаты
+                            if (examResponses.length >= 20) {
+                                showExamResults();
+                            }
+                        }
+                    }
+                    
+                    // В режиме обучения сразу показываем объяснение
+                    if (isLearningMode) {
+                        document.getElementById(`explanation-${cardIndex}`).classList.add('show');
+                        document.getElementById(`btn-${cardIndex}`).textContent = 'Скрыть объяснение';
+                    }
+                });
+            });
+            
+            // Перемешивание карточек
+            document.querySelector('.shuffle-btn').addEventListener('click', function() {
+                shuffleCards();
+            });
+            
+            // Сброс результатов
+            document.querySelector('.reset-btn').addEventListener('click', function() {
+                resetResults();
+            });
+            
+            // Показать все объяснения
+            document.getElementById('show-all-explanations').addEventListener('click', function() {
+                document.querySelectorAll('.explanation').forEach(el => {
+                    el.classList.toggle('show');
+                });
+                
+                const isShowing = document.querySelectorAll('.explanation.show').length > 0;
+                this.textContent = isShowing ? 'Скрыть все объяснения' : 'Показать все объяснения';
+            });
+            
+            // Перезапуск экзамена
+            document.getElementById('restart-btn').addEventListener('click', function() {
+                document.getElementById('exam-results').style.display = 'none';
+                resetResults();
+                examModeStarted = false;
+                examResponses = [];
+                
+                // Переключаемся в режим обучения
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector('.mode-btn[data-mode="learning"]').classList.add('active');
+                isLearningMode = true;
+                
+                // Показываем все объяснения
+                document.getElementById('show-all-explanations').classList.remove('hidden');
+                document.querySelectorAll('.explanation').forEach(el => {
+                    el.classList.add('show');
+                });
+            });
+        }
+
+        // Функция перемешивания карточек
+        function shuffleCards() {
+            const container = document.getElementById('cards-container');
+            const cards = Array.from(container.children);
+            
+            // Перемешиваем карточки
+            for (let i = cards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [cards[i], cards[j]] = [cards[j], cards[i]];
+            }
+            
+            // Очищаем контейнер и добавляем перемешанные карточки
+            container.innerHTML = '';
+            cards.forEach(card => container.appendChild(card));
+            
+            // Сбрасываем результаты
+            resetResults();
+        }
+
+        // Функция показа объяснения
+        function showExplanation(cardIndex) {
+            const explanation = document.getElementById(`explanation-${cardIndex}`);
+            const btn = document.getElementById(`btn-${cardIndex}`);
+            
+            explanation.classList.toggle('show');
+            btn.textContent = explanation.classList.contains('show') ? 'Скрыть объяснение' : 'Показать объяснение';
+        }
+
+        // Сброс результатов
+        function resetResults() {
+            correctAnswers = 0;
+            updateProgress();
+            
+            // Сбрасываем выделение и обратную связь
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            document.querySelectorAll('.feedback').forEach(fb => {
+                fb.textContent = '';
+                fb.className = 'feedback';
+            });
+            
+            // В режиме обучения показываем все объяснения
+            if (isLearningMode) {
+                document.querySelectorAll('.explanation').forEach(el => {
+                    el.classList.add('show');
+                });
+                document.getElementById('show-all-explanations').textContent = 'Скрыть все объяснения';
+            }
+            
+            // Скрываем результаты экзамена
+            document.getElementById('exam-results').style.display = 'none';
+        }
+
+        // Обновление прогресса
+        function updateProgress() {
+            document.getElementById('progress').textContent = `Правильных ответов: ${correctAnswers} из ${cardsData.length}`;
+        }
+
+        // Показ результатов экзамена
+        function showExamResults() {
+            examModeStarted = true;
+            
+            const correctCount = examResponses.filter(r => r.correct).length;
+            const incorrectCount = examResponses.length - correctCount;
+            
+            document.getElementById('results-summary').textContent = 
+                `Вы ответили правильно на ${correctCount} из ${examResponses.length} вопросов`;
+            
+            const resultsDetails = document.getElementById('results-details');
+            resultsDetails.innerHTML = '';
+            
+            // Добавляем детали по каждому вопросу
+            examResponses.forEach(response => {
+                const card = cardsData[response.question];
+                const resultItem = document.createElement('div');
+                resultItem.className = `result-item ${response.correct ? 'correct' : 'incorrect'}`;
+                resultItem.innerHTML = `
+                    <strong>Вопрос ${card.number} (${card.topic}):</strong> ${card.question}<br>
+                    ${response.correct ? '✓ Правильный ответ' : '✗ Неправильный ответ'}
+                `;
+                resultsDetails.appendChild(resultItem);
+            });
+            
+            // Показываем блок результатов
+            document.getElementById('exam-results').style.display = 'block';
+            
+            // Прокручиваем к результатам
+            document.getElementById('exam-results').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
