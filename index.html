@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -363,7 +363,7 @@
             </div>
             <div class="chapter-card" data-chapter="8">
                 <h3>Глава VIII</h3>
-                <p>Толкование и соблюдение правила</p>
+                <p>Толкование и соблюдение правил</p>
             </div>
             <div class="chapter-card" data-chapter="9">
                 <h3>Глава IX</h3>
@@ -536,7 +536,7 @@
                             if (cardsDataMatch && cardsDataMatch[1]) {
                                 // Очищаем и преобразуем JSON
                                 try {
-                                    let cardsData = JSON.parse(cardsDataMatch[1]);
+                                    let cardsData = JSON.parse(cardsDataMatch[1].replace(/(\r\n|\n|\r)/gm, "").replace(/\s+/g, " "));
                                     allChapterData[chapterNum] = cardsData;
                                     chaptersLoaded++;
                                     checkAllChaptersLoaded();
@@ -592,7 +592,9 @@
             // Проверяем, есть ли данные для экзамена
             let totalQuestions = 0;
             for (let chapter in allChapterData) {
-                totalQuestions += allChapterData[chapter].length;
+                if (allChapterData[chapter]) {
+                    totalQuestions += allChapterData[chapter].length;
+                }
             }
             
             if (totalQuestions === 0) {
@@ -777,7 +779,6 @@
 
         // Перезапуск экзамена
         function restartExam() {
-            // Заново загружаем данные и начинаем экзамен
             startExamPreparation();
         }
 
